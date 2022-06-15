@@ -16,9 +16,9 @@ public class TileMap : MonoBehaviour
         m_tile001 = Resources.Load<Tile>("Map/Tile/LevelScene_16x_1");
         m_tile002 = Resources.Load<Tile>("Map/Tile/LevelScene_16x_2");
 
-        for (int x = 0; x < 20; x++)
+        for (int x = -10; x < 10; x++)
         {
-            for (int y = 0; y < 20; y++)
+            for (int y = -10; y < 10; y++)
             {
                 Vector3Int p = new Vector3Int(x, y, 0);
                 m_tilemap.SetTile(p, m_tile001);
