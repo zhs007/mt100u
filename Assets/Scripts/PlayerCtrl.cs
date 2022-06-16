@@ -6,16 +6,17 @@ public class PlayerCtrl : MonoBehaviour
 {
     public Transform m_transform;
     public float m_zAngle;
+    public VariableJoystick m_variableJoystick;
 
     // Start is called before the first frame update
     void Start()
     {
+        m_variableJoystick = GameObject.Find("Variable Joystick").GetComponent<VariableJoystick>();
         m_transform = this.transform;
         m_zAngle = 0.0f;
     }
 
-    // Update is called once per frame
-    void Update()
+    void ProcKeyboard()
     {
         float dstAngle = 0.0f;
 
@@ -142,5 +143,31 @@ public class PlayerCtrl : MonoBehaviour
         {
             m_transform.position += new Vector3(0, -1f * Time.deltaTime, 0);
         }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        ProcKeyboard();
+
+        if (m_variableJoystick.Horizontal == 0 && m_variableJoystick.Vertical == 0)
+        {
+            return;
+        }
+
+        // float offAngle = Vector3.Angle(Quaternion.AngleAxis(m_zAngle, Vector3.up) * Vector3.up, new Vector3(m_variableJoystick.Horizontal, m_variableJoystick.Vertical, 0));
+        // float offAngle = Vector3.Angle(new Vector3(Mathf.Sin(m_zAngle * Mathf.Deg2Rad), Mathf.Cos(m_zAngle * Mathf.Deg2Rad), 0), new Vector3(m_variableJoystick.Horizontal, m_variableJoystick.Vertical, 0));
+        float offAngle = Vector3.SignedAngle(new Vector3(Mathf.Sin(m_zAngle * Mathf.Deg2Rad), Mathf.Cos(m_zAngle * Mathf.Deg2Rad), 0), new Vector3(m_variableJoystick.Horizontal, -m_variableJoystick.Vertical, 0), Vector3.forward);
+        offAngle *= Time.deltaTime;
+        m_transform.Rotate(new Vector3(0, 0, offAngle), Space.Self);
+        m_zAngle += offAngle;
+
+        m_zAngle %= 360;
+
+        Debug.Log("za - " + m_zAngle + " oa - " + offAngle);
+        Debug.Log("za - " + new Vector3(Mathf.Sin(m_zAngle * Mathf.Deg2Rad), Mathf.Cos(m_zAngle * Mathf.Deg2Rad), 0) + " oa - " + new Vector3(m_variableJoystick.Horizontal, -m_variableJoystick.Vertical, 0));
+
+        m_transform.position += new Vector3(0, m_variableJoystick.Vertical * Time.deltaTime, 0);
+        m_transform.position += new Vector3(m_variableJoystick.Horizontal * Time.deltaTime, 0, 0);
     }
 }
