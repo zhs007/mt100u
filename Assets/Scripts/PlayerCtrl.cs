@@ -6,14 +6,19 @@ public class PlayerCtrl : MonoBehaviour
 {
     public Transform m_transform;
     public float m_zAngle;
-    public VariableJoystick m_variableJoystick;
+    public float lastOffAngle;
+    public DynamicJoystick m_variableJoystick;
+    public GameObject mainCamera;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_variableJoystick = GameObject.Find("Variable Joystick").GetComponent<VariableJoystick>();
+        mainCamera = GameObject.Find("Main Camera");
+        m_variableJoystick = GameObject.Find("Dynamic Joystick").GetComponent<DynamicJoystick>();
         m_transform = this.transform;
         m_zAngle = 0.0f;
+
+        mainCamera.transform.position.Set(transform.position.x, transform.position.y, mainCamera.transform.position.z);
     }
 
     void ProcKeyboard()
@@ -158,16 +163,31 @@ public class PlayerCtrl : MonoBehaviour
         // float offAngle = Vector3.Angle(Quaternion.AngleAxis(m_zAngle, Vector3.up) * Vector3.up, new Vector3(m_variableJoystick.Horizontal, m_variableJoystick.Vertical, 0));
         // float offAngle = Vector3.Angle(new Vector3(Mathf.Sin(m_zAngle * Mathf.Deg2Rad), Mathf.Cos(m_zAngle * Mathf.Deg2Rad), 0), new Vector3(m_variableJoystick.Horizontal, m_variableJoystick.Vertical, 0));
         float offAngle = Vector3.SignedAngle(new Vector3(Mathf.Sin(m_zAngle * Mathf.Deg2Rad), Mathf.Cos(m_zAngle * Mathf.Deg2Rad), 0), new Vector3(m_variableJoystick.Horizontal, -m_variableJoystick.Vertical, 0), Vector3.forward);
-        offAngle *= Time.deltaTime;
-        m_transform.Rotate(new Vector3(0, 0, offAngle), Space.Self);
-        m_zAngle += offAngle;
+        // if ((offAngle < 0 && lastOffAngle < 0) || (offAngle > 0 && lastOffAngle > 0))
+        {
+            offAngle *= Time.deltaTime;
+            // if (Mathf.Abs(offAngle) > 1)
+            {
+                m_transform.Rotate(new Vector3(0, 0, offAngle), Space.Self);
+                m_zAngle += offAngle;
 
-        m_zAngle %= 360;
+                m_zAngle %= 360;
+            }
+        }
 
-        Debug.Log("za - " + m_zAngle + " oa - " + offAngle);
-        Debug.Log("za - " + new Vector3(Mathf.Sin(m_zAngle * Mathf.Deg2Rad), Mathf.Cos(m_zAngle * Mathf.Deg2Rad), 0) + " oa - " + new Vector3(m_variableJoystick.Horizontal, -m_variableJoystick.Vertical, 0));
+        lastOffAngle = offAngle;
 
-        m_transform.position += new Vector3(0, m_variableJoystick.Vertical * Time.deltaTime, 0);
-        m_transform.position += new Vector3(m_variableJoystick.Horizontal * Time.deltaTime, 0, 0);
+        // Debug.Log("za - " + m_zAngle + " oa - " + offAngle);
+        // Debug.Log("za - " + new Vector3(Mathf.Sin(m_zAngle * Mathf.Deg2Rad), Mathf.Cos(m_zAngle * Mathf.Deg2Rad), 0) + " oa - " + new Vector3(m_variableJoystick.Horizontal, -m_variableJoystick.Vertical, 0));
+
+        // m_transform.position += new Vector3(0, m_variableJoystick.Vertical * Time.deltaTime, 0);
+        // m_transform.position += new Vector3(m_variableJoystick.Horizontal * Time.deltaTime, 0, 0);
+
+        m_transform.position += new Vector3(-Mathf.Sin(m_zAngle * Mathf.Deg2Rad), Mathf.Cos(m_zAngle * Mathf.Deg2Rad), 0) * Time.deltaTime;
+
+        mainCamera.transform.position += new Vector3(-Mathf.Sin(m_zAngle * Mathf.Deg2Rad), Mathf.Cos(m_zAngle * Mathf.Deg2Rad), 0) * Time.deltaTime;
+
+        Debug.Log("player - " + transform.position);
+        Debug.Log("camera - " + mainCamera.transform.position);
     }
 }
