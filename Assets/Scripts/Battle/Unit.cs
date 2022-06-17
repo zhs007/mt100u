@@ -3,15 +3,16 @@ using System.Numerics;
 
 namespace Battle
 {
-    public class Unit
+    public class Unit : MapObj
     {
         protected Dictionary<int, int> props;
-        public Vector2 Pos { get; private set; }
-        public int UnitID { get; private set; }
-        public UnitData Data { get; private set; }
+        public Vector2 Forward;
+        public UnitData Data { get; protected set; }
 
-        public Unit(int unitID, UnitData data, Vector2 pos)
+        public Unit(int entityID, UnitData data, Vector2 pos)
         {
+            EntityID = entityID;
+
             Data = data;
 
             props = new Dictionary<int, int>();
@@ -21,5 +22,15 @@ namespace Battle
 
             Pos = pos;
         }
+
+        // public void SetPos(float x, float y)
+        // {
+        //     Pos = new Vector2(x, y);
+        // }
+
+        // public void SetForawar(float x, float y)
+        // {
+        //     Pos = new Vector2(x, y);
+        // }
     };
 }

@@ -13,12 +13,16 @@ public class PlayerCtrl : MonoBehaviour
 
     public GameObject mainCamera;
 
+    public BattleObj battle;
+
+    public Battle.Unit unit;
+
     // Start is called before the first frame update
     void Start()
     {
-        mainCamera = GameObject.Find("Main Camera");
-        joystick =
-            GameObject.Find("Dynamic Joystick").GetComponent<DynamicJoystick>();
+        // mainCamera = GameObject.Find("Main Camera");
+        // joystick =
+        //     GameObject.Find("Dynamic Joystick").GetComponent<DynamicJoystick>();
 
         // m_transform = this.transform;
         zAngle = 0.0f;
@@ -29,6 +33,8 @@ public class PlayerCtrl : MonoBehaviour
             .Set(transform.position.x,
             transform.position.y,
             mainCamera.transform.position.z);
+
+        unit = BattleObj.battle.NewUnit();
     }
 
     void ProcKeyboard()
@@ -211,6 +217,9 @@ public class PlayerCtrl : MonoBehaviour
         transform.Rotate(new Vector3(0, 0, offAngle - zAngle), Space.Self);
         zAngle = offAngle;
 
+        unit.Forward.X = -joystick.Horizontal;
+        unit.Forward.Y = joystick.Vertical;
+
         // transform.SetPositionAndRotation(transform.position, new Vector3(joystick.Horizontal, -joystick.Vertical, 0));
         // transform.LookAt(new Vector3(joystick.Horizontal, joystick.Vertical, transform.position.z));
         // Debug.Log("h - " + joystick.Horizontal + " v - " + joystick.Vertical);
@@ -220,11 +229,33 @@ public class PlayerCtrl : MonoBehaviour
         // m_transform.position += new Vector3(0, m_variableJoystick.Vertical * Time.deltaTime, 0);
         // m_transform.position += new Vector3(m_variableJoystick.Horizontal * Time.deltaTime, 0, 0);
 
-        transform.position += new Vector3(-Mathf.Sin(zAngle * Mathf.Deg2Rad), Mathf.Cos(zAngle * Mathf.Deg2Rad), 0) * Time.deltaTime;
+        Vector3 vec3t = new Vector3(-Mathf.Sin(zAngle * Mathf.Deg2Rad), Mathf.Cos(zAngle * Mathf.Deg2Rad), 0) * Time.deltaTime;
 
-        mainCamera.transform.position += new Vector3(-Mathf.Sin(zAngle * Mathf.Deg2Rad), Mathf.Cos(zAngle * Mathf.Deg2Rad), 0) * Time.deltaTime;
+        if (BattleObj.battle.CanMove(unit, new System.Numerics.Vector2(vec3t.x, vec3t.y)))
+        {
+            transform.position += vec3t;
+
+            mainCamera.transform.position += vec3t;
+
+            unit.Pos.X = transform.position.x;
+            unit.Pos.Y = transform.position.y;
+        }
 
         // Debug.Log("player - " + transform.position);
         // Debug.Log("camera - " + mainCamera.transform.position);
+    }
+
+    void FixedUpdate()
+    {
+        // unit.Pos.X = transform.position.x;
+        // unit.Pos.Y = transform.position.y;
+
+        // if (joystick.Horizontal == 0 && joystick.Vertical == 0)
+        // {
+        //     return;
+        // }
+
+        // unit.Forward.X = -joystick.Horizontal;
+        // unit.Forward.Y = joystick.Vertical;
     }
 }

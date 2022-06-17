@@ -5,6 +5,7 @@ using UnityEngine;
 public class MapObjs : MonoBehaviour
 {
     public GameObject[] prefabs;
+    public BattleObj battle;
 
     public int
 
@@ -42,6 +43,8 @@ public class MapObjs : MonoBehaviour
             Instantiate(prefabs[r],
             new Vector3(tx, ty, 0),
             Quaternion.identity);
+
+            BattleObj.battle.NewMapObj(new System.Numerics.Vector2(tx, ty));
         }
     }
 
