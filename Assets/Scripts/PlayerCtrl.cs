@@ -6,19 +6,29 @@ public class PlayerCtrl : MonoBehaviour
 {
     // public Transform m_transform;
     public float zAngle;
+
     public float lastOffAngle;
+
     public DynamicJoystick joystick;
+
     public GameObject mainCamera;
 
     // Start is called before the first frame update
     void Start()
     {
         mainCamera = GameObject.Find("Main Camera");
-        joystick = GameObject.Find("Dynamic Joystick").GetComponent<DynamicJoystick>();
+        joystick =
+            GameObject.Find("Dynamic Joystick").GetComponent<DynamicJoystick>();
+
         // m_transform = this.transform;
         zAngle = 0.0f;
 
-        mainCamera.transform.position.Set(transform.position.x, transform.position.y, mainCamera.transform.position.z);
+        mainCamera
+            .transform
+            .position
+            .Set(transform.position.x,
+            transform.position.y,
+            mainCamera.transform.position.z);
     }
 
     void ProcKeyboard()
@@ -98,7 +108,6 @@ public class PlayerCtrl : MonoBehaviour
             }
         }
 
-
         float offAngle = 0.0f;
         if (zAngle > dstAngle)
         {
@@ -162,22 +171,50 @@ public class PlayerCtrl : MonoBehaviour
 
         // float offAngle = Vector3.Angle(Quaternion.AngleAxis(m_zAngle, Vector3.up) * Vector3.up, new Vector3(m_variableJoystick.Horizontal, m_variableJoystick.Vertical, 0));
         // float offAngle = Vector3.Angle(new Vector3(Mathf.Sin(m_zAngle * Mathf.Deg2Rad), Mathf.Cos(m_zAngle * Mathf.Deg2Rad), 0), new Vector3(m_variableJoystick.Horizontal, m_variableJoystick.Vertical, 0));
-        float offAngle = Vector3.SignedAngle(new Vector3(Mathf.Sin(zAngle * Mathf.Deg2Rad), Mathf.Cos(zAngle * Mathf.Deg2Rad), 0), new Vector3(joystick.Horizontal, -joystick.Vertical, 0), Vector3.forward);
-        // if ((offAngle < 0 && lastOffAngle < 0) || (offAngle > 0 && lastOffAngle > 0))
+        // float offAngle =
+        //     Vector3
+        //         .SignedAngle(new Vector3(Mathf.Sin(zAngle * Mathf.Deg2Rad),
+        //             Mathf.Cos(zAngle * Mathf.Deg2Rad),
+        //             0),
+        //         new Vector3(joystick.Horizontal, -joystick.Vertical, 0),
+        //         Vector3.forward);
+        // // if ((offAngle < 0 && lastOffAngle < 0) || (offAngle > 0 && lastOffAngle > 0))
+        // {
+        //     offAngle *= Time.deltaTime;
+        //     // if (Mathf.Abs(offAngle) > 1)
+        //     {
+        //         // transform.Rotate(new Vector3(0, 0, offAngle), Space.Self);
+        //         zAngle += offAngle;
+        //         zAngle %= 360;
+        //     }
+        // }
+        // lastOffAngle = offAngle;
+        if (joystick.Horizontal == 0 && joystick.Vertical == 0)
         {
-            offAngle *= Time.deltaTime;
-            // if (Mathf.Abs(offAngle) > 1)
-            {
-                transform.Rotate(new Vector3(0, 0, offAngle), Space.Self);
-                zAngle += offAngle;
-
-                zAngle %= 360;
-            }
+            return;
         }
 
-        lastOffAngle = offAngle;
+        Vector3 vec3 = new Vector3(-joystick.Horizontal, joystick.Vertical, 0);
+        vec3.Normalize();
+        float offAngle = Mathf.Asin(vec3.x) * Mathf.Rad2Deg;
+        if (joystick.Vertical < 0)
+        {
+            if (joystick.Horizontal < 0)
+            {
+                offAngle = 180 - offAngle;
+            }
+            else
+            {
+                offAngle = 180 - offAngle;
+            }
+        }
+        transform.Rotate(new Vector3(0, 0, offAngle - zAngle), Space.Self);
+        zAngle = offAngle;
 
-        // Debug.Log("za - " + m_zAngle + " oa - " + offAngle);
+        // transform.SetPositionAndRotation(transform.position, new Vector3(joystick.Horizontal, -joystick.Vertical, 0));
+        // transform.LookAt(new Vector3(joystick.Horizontal, joystick.Vertical, transform.position.z));
+        // Debug.Log("h - " + joystick.Horizontal + " v - " + joystick.Vertical);
+        // Debug.Log("za - " + zAngle + " oa - " + offAngle);
         // Debug.Log("za - " + new Vector3(Mathf.Sin(m_zAngle * Mathf.Deg2Rad), Mathf.Cos(m_zAngle * Mathf.Deg2Rad), 0) + " oa - " + new Vector3(m_variableJoystick.Horizontal, -m_variableJoystick.Vertical, 0));
 
         // m_transform.position += new Vector3(0, m_variableJoystick.Vertical * Time.deltaTime, 0);
