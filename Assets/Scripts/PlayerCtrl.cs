@@ -35,6 +35,7 @@ public class PlayerCtrl : MonoBehaviour
             mainCamera.transform.position.z);
 
         unit = battle.battle.NewUnit(new Vector2(transform.position.x, transform.position.y), 1);
+        battle.battle.AddObjArea(1000, unit, 10);
     }
 
     void ProcKeyboard()

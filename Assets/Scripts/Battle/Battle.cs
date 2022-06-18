@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace Battle
@@ -16,6 +17,7 @@ namespace Battle
         public int EndY { get; private set; }
         public int AreaWidth { get; private set; }
         public int AreaHeight { get; private set; }
+        protected Dictionary<int, MapObjArea> mapObjAreas;
 
         public Battle(int startX, int startY, int endX, int endY, int areaWidth, int areaHeight)
         {
@@ -48,6 +50,8 @@ namespace Battle
 
             curEntityID = 1;
             mapObjs = new Dictionary<int, MapObj>();
+
+            mapObjAreas = new Dictionary<int, MapObjArea>();
         }
 
         public Unit NewUnit(Vector2 pos, float size)
@@ -66,12 +70,17 @@ namespace Battle
             return unit;
         }
 
-        public MapObj NewMapObj(Vector2 pos, float size, bool isStatic)
+        public MapObj NewMapObj(Vector2 pos, float size, bool isStatic, Func<MapObj, int> onNew)
         {
             MapObj obj = new MapObj(curEntityID, pos, size, isStatic, this);
             obj.Pos = pos;
 
             mapObjs[curEntityID++] = obj;
+
+            if (onNew != null)
+            {
+                onNew(obj);
+            }
 
             onNewObj(obj);
 
@@ -164,6 +173,11 @@ namespace Battle
             Area curArea = areas[ax, ay];
             curArea.Add(obj);
             obj.onChgArea(curArea);
+
+            foreach (KeyValuePair<int, MapObjArea> entry in mapObjAreas)
+            {
+                entry.Value.IsIn(obj);
+            }
         }
 
         public void onChgPos(MapObj obj)
@@ -178,6 +192,42 @@ namespace Battle
                 Area curArea = areas[ax, ay];
                 curArea.Add(obj);
                 obj.onChgArea(curArea);
+            }
+
+            foreach (KeyValuePair<int, MapObjArea> entry in mapObjAreas)
+            {
+                procObjArea(entry.Value);
+            }
+        }
+
+        public void AddObjArea(int objAreaID, MapObj obj, float size)
+        {
+            MapObjArea moa = new MapObjArea(objAreaID, obj, size);
+
+            mapObjAreas[objAreaID] = moa;
+
+            obj.onAddObjArea(moa);
+        }
+
+        protected void procObjArea(MapObjArea moa)
+        {
+            int sax = moa.obj.area.AreaX;
+            int say = moa.obj.area.AreaY;
+            int eax = GetAreaX((int)(moa.obj.Pos.x + moa.Size));
+            int eay = GetAreaY((int)(moa.obj.Pos.y + moa.Size));
+
+            int sx = sax > eax ? eax : sax;
+            int sy = say > eay ? eay : say;
+            int ex = sax < eax ? eax : sax;
+            int ey = say < eay ? eay : say;
+
+            for (int ax = sx; ax <= ex; ax++)
+            {
+                for (int ay = sy; ay <= ey; ay++)
+                {
+                    Area ca = areas[ax, ay];
+                    ca.procObjArea(moa);
+                }
             }
         }
     };

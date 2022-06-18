@@ -35,11 +35,24 @@ public class MapObjs : MonoBehaviour
             int r = Random.Range(0, prefabs.Length);
             lst.Add(new Vector2(tx, ty));
 
-            Instantiate(prefabs[r],
+            GameObject gobj = Instantiate(prefabs[r],
             new Vector3(tx, ty, 0),
             Quaternion.identity);
 
-            battle.battle.NewMapObj(new Vector2(tx, ty), 1, true);
+            Battle.MapObj obj = battle.battle.NewMapObj(new Vector2(tx, ty), 1, true, (nobj) =>
+            {
+                nobj.AddObjAreaFunc(1000, (ison) =>
+                {
+                    ShadowObj sobj = gobj.GetComponent<ShadowObj>();
+                    sobj.TurnShadow(ison);
+
+                    Debug.Log("turn on shadow");
+
+                    return 0;
+                });
+
+                return 0;
+            });
         }
     }
 

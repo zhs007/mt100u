@@ -71,5 +71,24 @@ namespace Battle
 
             return true;
         }
+
+        public void procObjArea(MapObjArea moa)
+        {
+            foreach (KeyValuePair<int, MapObj> entry in objs)
+            {
+                if (entry.Key != moa.obj.EntityID)
+                {
+                    moa.IsIn(entry.Value);
+                }
+            }
+
+            foreach (KeyValuePair<int, MapObj> entry in staticObjs)
+            {
+                if (entry.Key != moa.obj.EntityID)
+                {
+                    moa.IsIn(entry.Value);
+                }
+            }
+        }
     };
 }
