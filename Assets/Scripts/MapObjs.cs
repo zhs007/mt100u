@@ -7,12 +7,7 @@ public class MapObjs : MonoBehaviour
     public GameObject[] prefabs;
     public BattleObj battle;
 
-    public int
-
-            minX,
-            minY,
-            maxX,
-            maxY;
+    public int minX, minY, maxX, maxY;
 
     public int nums;
 
@@ -44,7 +39,7 @@ public class MapObjs : MonoBehaviour
             new Vector3(tx, ty, 0),
             Quaternion.identity);
 
-            battle.battle.NewMapObj(new System.Numerics.Vector2(tx, ty));
+            battle.battle.NewMapObj(new Vector2(tx, ty), 1);
         }
     }
 

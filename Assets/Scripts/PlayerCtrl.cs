@@ -217,8 +217,8 @@ public class PlayerCtrl : MonoBehaviour
         transform.Rotate(new Vector3(0, 0, offAngle - zAngle), Space.Self);
         zAngle = offAngle;
 
-        unit.Forward.X = -joystick.Horizontal;
-        unit.Forward.Y = joystick.Vertical;
+        unit.Forward.x = -joystick.Horizontal;
+        unit.Forward.y = joystick.Vertical;
 
         // transform.SetPositionAndRotation(transform.position, new Vector3(joystick.Horizontal, -joystick.Vertical, 0));
         // transform.LookAt(new Vector3(joystick.Horizontal, joystick.Vertical, transform.position.z));
@@ -231,14 +231,14 @@ public class PlayerCtrl : MonoBehaviour
 
         Vector3 vec3t = new Vector3(-Mathf.Sin(zAngle * Mathf.Deg2Rad), Mathf.Cos(zAngle * Mathf.Deg2Rad), 0) * Time.deltaTime;
 
-        if (battle.battle.CanMove(unit, new System.Numerics.Vector2(vec3t.x, vec3t.y)))
+        if (battle.battle.CanMove(unit, new Vector2(vec3t.x, vec3t.y)))
         {
             transform.position += vec3t;
 
             mainCamera.transform.position += vec3t;
 
-            unit.Pos.X = transform.position.x;
-            unit.Pos.Y = transform.position.y;
+            unit.Pos.x = transform.position.x;
+            unit.Pos.y = transform.position.y;
         }
 
         // Debug.Log("player - " + transform.position);

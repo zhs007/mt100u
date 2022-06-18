@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Numerics;
+using UnityEngine;
 
 namespace Battle
 {
@@ -9,18 +9,14 @@ namespace Battle
         public Vector2 Forward;
         public UnitData Data { get; protected set; }
 
-        public Unit(int entityID, UnitData data, Vector2 pos)
+        public Unit(int entityID, UnitData data, Vector2 pos, float size) : base(entityID, pos, size)
         {
-            EntityID = entityID;
-
             Data = data;
 
             props = new Dictionary<int, int>();
 
             props[Prop.HP] = data.hp;
             props[Prop.DPS] = data.dps;
-
-            Pos = pos;
         }
 
         // public void SetPos(float x, float y)

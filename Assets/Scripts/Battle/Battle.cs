@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Numerics;
+using UnityEngine;
 
 namespace Battle
 {
@@ -22,18 +22,17 @@ namespace Battle
             ud.dps = 80;
             ud.typeid = 1;
 
-            Unit unit = new Unit(curEntityID, ud, new Vector2(0, 0));
+            Unit unit = new Unit(curEntityID, ud, new Vector2(0, 0), 1);
 
             mapObjs[curEntityID++] = unit;
 
             return unit;
         }
 
-        public MapObj NewMapObj(Vector2 pos)
+        public MapObj NewMapObj(Vector2 pos, float size)
         {
-            MapObj obj = new MapObj();
+            MapObj obj = new MapObj(curEntityID, pos, size);
             obj.Pos = pos;
-            obj.EntityID = curEntityID;
 
             mapObjs[curEntityID++] = obj;
 
@@ -46,7 +45,7 @@ namespace Battle
             {
                 if (entry.Key != unit.EntityID)
                 {
-                    if (entry.Value.IsCollect(unit, off))
+                    if (entry.Value.CanCollide(unit, off))
                     {
                         return false;
                     }
