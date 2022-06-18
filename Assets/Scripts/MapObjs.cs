@@ -44,7 +44,7 @@ public class MapObjs : MonoBehaviour
             new Vector3(tx, ty, 0),
             Quaternion.identity);
 
-            BattleObj.battle.NewMapObj(new System.Numerics.Vector2(tx, ty));
+            battle.battle.NewMapObj(new System.Numerics.Vector2(tx, ty));
         }
     }
 

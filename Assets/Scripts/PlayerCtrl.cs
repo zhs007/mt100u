@@ -34,7 +34,7 @@ public class PlayerCtrl : MonoBehaviour
             transform.position.y,
             mainCamera.transform.position.z);
 
-        unit = BattleObj.battle.NewUnit();
+        unit = battle.battle.NewUnit();
     }
 
     void ProcKeyboard()
@@ -231,7 +231,7 @@ public class PlayerCtrl : MonoBehaviour
 
         Vector3 vec3t = new Vector3(-Mathf.Sin(zAngle * Mathf.Deg2Rad), Mathf.Cos(zAngle * Mathf.Deg2Rad), 0) * Time.deltaTime;
 
-        if (BattleObj.battle.CanMove(unit, new System.Numerics.Vector2(vec3t.x, vec3t.y)))
+        if (battle.battle.CanMove(unit, new System.Numerics.Vector2(vec3t.x, vec3t.y)))
         {
             transform.position += vec3t;
 

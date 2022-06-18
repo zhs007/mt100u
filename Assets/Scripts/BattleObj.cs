@@ -5,7 +5,13 @@ using Battle;
 
 public class BattleObj : MonoBehaviour
 {
-    static public Battle.Battle battle = new Battle.Battle();
+    public Battle.Battle battle = new Battle.Battle();
+
+    // public BattleObj()
+    // {
+    //     battle = new Battle.Battle();
+    // }
+
     // Start is called before the first frame update
     void Start()
     {
