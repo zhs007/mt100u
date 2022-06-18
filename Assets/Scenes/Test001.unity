@@ -513,6 +513,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19cdf3b3f841c4fa9a9b1a532fddd314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minX: -100
+  minY: -100
+  maxX: 100
+  maxY: 100
+  areaW: 10
+  areaH: 10
 --- !u!4 &1032211376
 Transform:
   m_ObjectHideFlags: 0

@@ -9,13 +9,18 @@ namespace Battle
         public float Size;
         public int EntityID { get; private set; }
         protected Dictionary<int, CollisionData> mapCollisions;
+        public bool IsStatic { get; private set; }
+        public Area area { get; private set; }
+        protected Battle battle;
 
-        public MapObj(int entityID, Vector2 pos, float size)
+        public MapObj(int entityID, Vector2 pos, float size, bool isStatic, Battle battle)
         {
             EntityID = entityID;
             Pos = pos;
             Size = size;
             mapCollisions = new Dictionary<int, CollisionData>();
+            IsStatic = isStatic;
+            this.battle = battle;
         }
 
         public bool CanCollide(MapObj obj, Vector2 off)
@@ -46,6 +51,27 @@ namespace Battle
             }
 
             return cd.CanCollide(distance);
+        }
+
+        public void onChgArea(Area area)
+        {
+            this.area = area;
+        }
+
+        public void Move(Vector2 off)
+        {
+            int sx = (int)Pos.x;
+            int sy = (int)Pos.y;
+
+            Pos += off;
+
+            int ex = (int)Pos.x;
+            int ey = (int)Pos.y;
+
+            if (sx != ex || sy != ey)
+            {
+                battle.onChgPos(this);
+            }
         }
     };
 }

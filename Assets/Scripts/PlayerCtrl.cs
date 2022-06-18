@@ -34,7 +34,7 @@ public class PlayerCtrl : MonoBehaviour
             transform.position.y,
             mainCamera.transform.position.z);
 
-        unit = battle.battle.NewUnit();
+        unit = battle.battle.NewUnit(new Vector2(transform.position.x, transform.position.y), 1);
     }
 
     void ProcKeyboard()
@@ -237,8 +237,10 @@ public class PlayerCtrl : MonoBehaviour
 
             mainCamera.transform.position += vec3t;
 
-            unit.Pos.x = transform.position.x;
-            unit.Pos.y = transform.position.y;
+            // unit.Pos.x = transform.position.x;
+            // unit.Pos.y = transform.position.y;
+
+            unit.Move(new Vector2(vec3t.x, vec3t.y));
         }
 
         // Debug.Log("player - " + transform.position);

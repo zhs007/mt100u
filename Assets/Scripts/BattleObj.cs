@@ -5,12 +5,14 @@ using Battle;
 
 public class BattleObj : MonoBehaviour
 {
-    public Battle.Battle battle = new Battle.Battle();
+    public int minX, minY, maxX, maxY;
+    public int areaW, areaH;
+    public Battle.Battle battle;
 
-    // public BattleObj()
-    // {
-    //     battle = new Battle.Battle();
-    // }
+    public BattleObj()
+    {
+        battle = new Battle.Battle(minX, minY, maxX, maxY, areaW, areaH);
+    }
 
     // Start is called before the first frame update
     void Start()

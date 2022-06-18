@@ -39,7 +39,7 @@ public class MapObjs : MonoBehaviour
             new Vector3(tx, ty, 0),
             Quaternion.identity);
 
-            battle.battle.NewMapObj(new Vector2(tx, ty), 1);
+            battle.battle.NewMapObj(new Vector2(tx, ty), 1, true);
         }
     }
 

@@ -9,7 +9,7 @@ namespace Battle
         public Vector2 Forward;
         public UnitData Data { get; protected set; }
 
-        public Unit(int entityID, UnitData data, Vector2 pos, float size) : base(entityID, pos, size)
+        public Unit(int entityID, UnitData data, Vector2 pos, float size, bool isStatic, Battle battle) : base(entityID, pos, size, isStatic, battle)
         {
             Data = data;
 
