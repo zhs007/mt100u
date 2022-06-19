@@ -57,14 +57,14 @@ namespace Battle
             mapAIUnit = new Dictionary<int, Unit>();
         }
 
-        public Unit NewUnit(Vector2 pos, float size)
+        public Unit NewUnit(Vector2 pos, float size, GameObject gameObj)
         {
             UnitData ud = new UnitData();
             ud.hp = 120;
             ud.dps = 80;
             ud.typeid = 1;
 
-            Unit unit = new Unit(curEntityID, ud, pos, size, false, this);
+            Unit unit = new Unit(curEntityID, ud, pos, size, false, this, gameObj);
 
             mapObjs[curEntityID++] = unit;
 
@@ -73,9 +73,9 @@ namespace Battle
             return unit;
         }
 
-        public MapObj NewMapObj(Vector2 pos, float size, bool isStatic, Func<MapObj, int> onNew)
+        public MapObj NewMapObj(Vector2 pos, float size, bool isStatic, GameObject gameObj, Func<MapObj, int> onNew)
         {
-            MapObj obj = new MapObj(curEntityID, pos, size, isStatic, this);
+            MapObj obj = new MapObj(curEntityID, pos, size, isStatic, this, gameObj);
             obj.Pos = pos;
 
             mapObjs[curEntityID++] = obj;

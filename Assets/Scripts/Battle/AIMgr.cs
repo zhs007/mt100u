@@ -24,5 +24,10 @@ namespace Battle
 
             return null;
         }
+
+        public static void Init()
+        {
+            AIMgr.RegAI(AIType.AI1, (unit) => { return new AI1(unit); });
+        }
     };
 }

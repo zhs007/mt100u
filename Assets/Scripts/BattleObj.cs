@@ -11,6 +11,8 @@ public class BattleObj : MonoBehaviour
 
     public BattleObj()
     {
+        Battle.AIMgr.Init();
+
         battle = new Battle.Battle(minX, minY, maxX, maxY, areaW, areaH);
     }
 
@@ -23,11 +25,10 @@ public class BattleObj : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
     }
 
     void FixedUpdate()
     {
-
+        battle.onIdle();
     }
 }

@@ -44,7 +44,7 @@ public class MapObjs : MonoBehaviour
             new Vector3(tx, ty, 0),
             Quaternion.identity);
 
-            Battle.MapObj obj = battle.battle.NewMapObj(new Vector2(tx, ty), 1, true, (nobj) =>
+            Battle.MapObj obj = battle.battle.NewMapObj(new Vector2(tx, ty), 1, true, gobj, (nobj) =>
             {
                 nobj.AddObjAreaFunc(1000, (ison) =>
                 {

@@ -16,8 +16,9 @@ namespace Battle
         protected Dictionary<int, MapObjArea> mapAreas; // 对象区域缓存，理解为领域吧
         protected Dictionary<int, Func<bool, int>> mapObjAreaFunc;  // 进入别人领域时触发的事件
         public int Camp { get; private set; } // 广义的阵营，阵营内部和阵营外部很多处理会不一样，实际上，譬如场景内静态物体，也会是一种中立阵营
+        public GameObject gameObj { get; private set; }
 
-        public MapObj(int entityID, Vector2 pos, float size, bool isStatic, Battle battle)
+        public MapObj(int entityID, Vector2 pos, float size, bool isStatic, Battle battle, GameObject gameObj)
         {
             EntityID = entityID;
             Pos = pos;
@@ -27,6 +28,7 @@ namespace Battle
             this.battle = battle;
             mapAreas = new Dictionary<int, MapObjArea>();
             mapObjAreaFunc = new Dictionary<int, Func<bool, int>>();
+            this.gameObj = gameObj;
         }
 
         public bool CanCollide(MapObj obj, Vector2 off)
