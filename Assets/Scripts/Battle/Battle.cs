@@ -18,6 +18,7 @@ namespace Battle
         public int AreaWidth { get; private set; }
         public int AreaHeight { get; private set; }
         protected Dictionary<int, MapObjArea> mapObjAreas;
+        protected Dictionary<int, Unit> mapAIUnit;
 
         public Battle(int startX, int startY, int endX, int endY, int areaWidth, int areaHeight)
         {
@@ -52,6 +53,8 @@ namespace Battle
             mapObjs = new Dictionary<int, MapObj>();
 
             mapObjAreas = new Dictionary<int, MapObjArea>();
+
+            mapAIUnit = new Dictionary<int, Unit>();
         }
 
         public Unit NewUnit(Vector2 pos, float size)
@@ -110,17 +113,6 @@ namespace Battle
                     }
                 }
             }
-
-            // foreach (KeyValuePair<int, MapObj> entry in mapObjs)
-            // {
-            //     if (entry.Key != unit.EntityID)
-            //     {
-            //         if (entry.Value.CanCollide(unit, off))
-            //         {
-            //             return false;
-            //         }
-            //     }
-            // }
 
             return true;
         }
@@ -259,6 +251,20 @@ namespace Battle
             }
 
             return true;
+        }
+
+        public void addAIUnit(Unit unit)
+        {
+            mapAIUnit[unit.EntityID] = unit;
+        }
+
+        public void onIdle()
+        {
+            foreach (KeyValuePair<int, Unit> entry in mapAIUnit)
+            {
+                entry.Value.onAIIdle();
+                // procObjArea(entry.Value);
+            }
         }
     };
 }

@@ -44,7 +44,9 @@ public class MapEnemies : MonoBehaviour
             Quaternion.identity);
 
             // Battle.MapObj obj = battle.battle.New(new Vector2(tx, ty), 1, true, null);
-            battle.battle.NewUnit(new Vector2(tx, ty), 1);
+            Battle.Unit unit = battle.battle.NewUnit(new Vector2(tx, ty), 1);
+            unit.AddAI(Battle.AIType.AI1);
+            // unit.AddAI(new Battle.AI1(unit));
         }
     }
 

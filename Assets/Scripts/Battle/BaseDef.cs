@@ -12,4 +12,9 @@ namespace Battle
         public const int MaxHP = 1001;
         public const int CurDPS = 1002;
     };
+
+    public class AIType
+    {
+        public const int AI1 = 1;
+    };
 }
