@@ -230,5 +230,35 @@ namespace Battle
                 }
             }
         }
+
+        protected (int, int, int, int) calcAreaWithPosSize(Vector2 pos, float size)
+        {
+            int sax = GetAreaX((int)(pos.x - size));
+            int say = GetAreaY((int)(pos.y - size));
+            int eax = GetAreaX((int)(pos.x + size));
+            int eay = GetAreaY((int)(pos.y + size));
+
+            return (sax, say, eax, eay);
+        }
+
+        // 这个位置是否可以生成新对象
+        public bool IsValidPos(Vector2 pos, float size)
+        {
+            (int sax, int say, int eax, int eay) = calcAreaWithPosSize(pos, size);
+
+            for (int ax = sax; ax <= eax; ax++)
+            {
+                for (int ay = say; ay <= eay; ay++)
+                {
+                    Area ca = areas[ax, ay];
+                    if (!ca.IsValidPos(pos, size))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
     };
 }

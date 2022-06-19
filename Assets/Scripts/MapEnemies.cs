@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapObjs : MonoBehaviour
+public class MapEnemies : MonoBehaviour
 {
     public GameObject[] prefabs;
     public BattleObj battle;
@@ -27,7 +27,6 @@ public class MapObjs : MonoBehaviour
                 // {
                 //     break;
                 // }
-
                 if (battle.battle.IsValidPos(new Vector2(tx, ty), 1))
                 {
                     break;
@@ -44,25 +43,14 @@ public class MapObjs : MonoBehaviour
             new Vector3(tx, ty, 0),
             Quaternion.identity);
 
-            Battle.MapObj obj = battle.battle.NewMapObj(new Vector2(tx, ty), 1, true, (nobj) =>
-            {
-                nobj.AddObjAreaFunc(1000, (ison) =>
-                {
-                    ShadowObj sobj = gobj.GetComponent<ShadowObj>();
-                    sobj.TurnShadow(ison);
-
-                    Debug.Log("turn on shadow");
-
-                    return 0;
-                });
-
-                return 0;
-            });
+            // Battle.MapObj obj = battle.battle.New(new Vector2(tx, ty), 1, true, null);
+            battle.battle.NewUnit(new Vector2(tx, ty), 1);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+
     }
 }

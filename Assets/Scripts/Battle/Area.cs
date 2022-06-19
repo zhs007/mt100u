@@ -90,5 +90,27 @@ namespace Battle
                 }
             }
         }
+
+        // 这个位置是否可以生成新对象
+        public bool IsValidPos(Vector2 pos, float size)
+        {
+            foreach (KeyValuePair<int, MapObj> entry in objs)
+            {
+                if (entry.Value.CanCollideEx(pos, size))
+                {
+                    return false;
+                }
+            }
+
+            foreach (KeyValuePair<int, MapObj> entry in staticObjs)
+            {
+                if (entry.Value.CanCollideEx(pos, size))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     };
 }

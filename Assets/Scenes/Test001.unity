@@ -320,6 +320,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba0d0e7a039f526499c356a3c5cd6d3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &669254452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 669254454}
+  - component: {fileID: 669254453}
+  m_Layer: 0
+  m_Name: Enemies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &669254453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 669254452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 394339dbd47e644c5815258bf8c64760, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabs:
+  - {fileID: 7384561905904062325, guid: abeef1a855c8d498db8ba754cc8950d1, type: 3}
+  battle: {fileID: 1032211375}
+  minX: -50
+  minY: -50
+  maxX: 50
+  maxY: 50
+  nums: 100
+--- !u!4 &669254454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 669254452}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.8256557, y: 0.70121413, z: 0.044380605}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &905617385
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -685,11 +737,11 @@ MonoBehaviour:
   - {fileID: 5720089622862832134, guid: 50fccc5db7c62438d963cb11873d2c26, type: 3}
   - {fileID: 6226281341201286931, guid: 040aad6b988fe438aa891e2b7a455b13, type: 3}
   battle: {fileID: 1032211375}
-  minX: -100
-  minY: -100
-  maxX: 100
-  maxY: 100
-  nums: 5000
+  minX: -50
+  minY: -50
+  maxX: 50
+  maxY: 50
+  nums: 100
 --- !u!4 &1452299754
 Transform:
   m_ObjectHideFlags: 0
