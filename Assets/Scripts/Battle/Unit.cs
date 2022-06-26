@@ -9,8 +9,9 @@ namespace Battle
         public Vector2 Forward;
         public UnitData Data { get; protected set; }
         protected IAI ai;
+        protected int lastThinkTs;
 
-        public Unit(int entityID, UnitData data, Vector2 pos, float size, bool isStatic, Battle battle, GameObject gameObj) : base(entityID, pos, size, isStatic, battle, gameObj)
+        public Unit(int entityID, UnitData data, Vector2 pos, bool isStatic, Battle battle, GameObject gameObj) : base(entityID, pos, data.size, isStatic, battle, gameObj)
         {
             Data = data;
 
@@ -20,6 +21,8 @@ namespace Battle
             props[Prop.DPS] = data.dps;
 
             Forward = new Vector2(Mathf.Cos(0), Mathf.Sin(0));
+
+            lastThinkTs = Random.Range(0, data.thinkts);
         }
 
         public void AddAI(int aiType)
@@ -34,20 +37,33 @@ namespace Battle
             // battle.addAIUnit(this);
         }
 
-        public void onAIIdle()
+        public void onAIIdle(int ts)
         {
             if (ai != null)
             {
-                ai.onIdle();
+                // Debug.Log("onaiidle " + lastThinkTs + " " + ts);
+                lastThinkTs -= ts;
+
+                if (lastThinkTs <= 0)
+                {
+                    if (ai.onThink())
+                    {
+                        lastThinkTs = Data.thinkts;
+                    }
+                }
+
+                ai.onIdle(ts);
             }
         }
 
-        public void MoveForward()
+        public void MoveForward(float ts)
         {
             if (battle.CanMove(this, Forward))
             {
-                Pos += Forward;
-                gameObj.transform.position += new Vector3(Forward.x, Forward.y, 0);
+                var vec2 = Forward * ts * Data.speed;
+
+                Pos += vec2;
+                gameObj.transform.position += new Vector3(vec2.x, vec2.y, 0);
             }
         }
 

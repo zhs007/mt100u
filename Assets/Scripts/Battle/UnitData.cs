@@ -9,5 +9,7 @@ namespace Battle
         public int hp { get; set; }
         public int dps { get; set; }
         public float speed { get; set; }
+        public float size { get; set; }
+        public int thinkts { get; set; }
     };
 }

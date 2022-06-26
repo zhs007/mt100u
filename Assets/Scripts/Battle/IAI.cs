@@ -5,6 +5,7 @@ namespace Battle
 {
     public interface IAI
     {
-        public void onIdle();
+        public void onIdle(int ts);
+        public bool onThink();
     };
 }

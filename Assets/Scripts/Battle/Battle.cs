@@ -57,11 +57,11 @@ namespace Battle
             mapAIUnit = new Dictionary<int, Unit>();
         }
 
-        public Unit NewUnit(int unitTypeID, Vector2 pos, float size, GameObject gameObj)
+        public Unit NewUnit(int unitTypeID, Vector2 pos, GameObject gameObj)
         {
             UnitData ud = UnitMgr.GetUnitData(unitTypeID);
 
-            Unit unit = new Unit(curEntityID, ud, pos, size, false, this, gameObj);
+            Unit unit = new Unit(curEntityID, ud, pos, false, this, gameObj);
 
             mapObjs[curEntityID++] = unit;
 
@@ -255,11 +255,11 @@ namespace Battle
             mapAIUnit[unit.EntityID] = unit;
         }
 
-        public void onIdle()
+        public void onIdle(int ts)
         {
             foreach (KeyValuePair<int, Unit> entry in mapAIUnit)
             {
-                entry.Value.onAIIdle();
+                entry.Value.onAIIdle(ts);
                 // procObjArea(entry.Value);
             }
         }

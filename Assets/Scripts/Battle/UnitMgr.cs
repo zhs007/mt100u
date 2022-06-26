@@ -63,11 +63,19 @@ namespace Battle
                             {
                                 ud.speed = int.Parse(csvReader[i]) / 100.0f;
                             }
+                            else if (arrHeader[i] == "size")
+                            {
+                                ud.size = int.Parse(csvReader[i]) / 100.0f;
+                            }
+                            else if (arrHeader[i] == "thinkts")
+                            {
+                                ud.thinkts = int.Parse(csvReader[i]);
+                            }
                         }
 
                         mapUnitData[ud.typeid] = ud;
 
-                        Debug.Log("load unitdata " + ud.typeid + " speed " + ud.speed);
+                        // Debug.Log("load unitdata " + ud.typeid + " speed " + ud.speed);
                     }
 
                     row++;

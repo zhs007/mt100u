@@ -19,7 +19,7 @@ public class BattleObj : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("BattleObj start...");
+        // Debug.Log("BattleObj start...");
 
         Battle.UnitMgr.Init();
 
@@ -34,6 +34,6 @@ public class BattleObj : MonoBehaviour
 
     void FixedUpdate()
     {
-        battle.onIdle();
+        battle.onIdle((int)(Time.deltaTime * 1000));
     }
 }

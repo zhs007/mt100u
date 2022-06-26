@@ -14,7 +14,7 @@ public class MapEnemies : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("MapEnemies start...");
+        // Debug.Log("MapEnemies start...");
         // List<Vector2> lst = new List<Vector2>();
 
         for (int i = 0; i < nums; ++i)
@@ -45,7 +45,7 @@ public class MapEnemies : MonoBehaviour
             Quaternion.identity);
 
             // Battle.MapObj obj = battle.battle.New(new Vector2(tx, ty), 1, true, null);
-            Battle.Unit unit = battle.battle.NewUnit(20000, new Vector2(tx, ty), 1, gobj);
+            Battle.Unit unit = battle.battle.NewUnit(20000, new Vector2(tx, ty), gobj);
             unit.AddAI(Battle.AIType.AI1);
             // unit.AddAI(new Battle.AI1(unit));
         }
