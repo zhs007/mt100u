@@ -10,6 +10,16 @@ namespace Battle
     {
         protected static Dictionary<int, UnitData> mapUnitData = new Dictionary<int, UnitData>();
 
+        public static UnitData GetUnitData(int typeid)
+        {
+            if (mapUnitData.ContainsKey(typeid))
+            {
+                return mapUnitData[typeid];
+            }
+
+            return null;
+        }
+
         public static void Init()
         {
             var docName = @"/chara.csv";
@@ -51,13 +61,13 @@ namespace Battle
                             }
                             else if (arrHeader[i] == "speed")
                             {
-                                ud.speed = int.Parse(csvReader[i]);
+                                ud.speed = int.Parse(csvReader[i]) / 100.0f;
                             }
                         }
 
                         mapUnitData[ud.typeid] = ud;
 
-                        Debug.Log("load unitdata " + ud.typeid);
+                        Debug.Log("load unitdata " + ud.typeid + " speed " + ud.speed);
                     }
 
                     row++;

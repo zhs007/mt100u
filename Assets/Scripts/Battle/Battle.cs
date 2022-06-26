@@ -57,12 +57,9 @@ namespace Battle
             mapAIUnit = new Dictionary<int, Unit>();
         }
 
-        public Unit NewUnit(Vector2 pos, float size, GameObject gameObj)
+        public Unit NewUnit(int unitTypeID, Vector2 pos, float size, GameObject gameObj)
         {
-            UnitData ud = new UnitData();
-            ud.hp = 120;
-            ud.dps = 80;
-            ud.typeid = 1;
+            UnitData ud = UnitMgr.GetUnitData(unitTypeID);
 
             Unit unit = new Unit(curEntityID, ud, pos, size, false, this, gameObj);
 
