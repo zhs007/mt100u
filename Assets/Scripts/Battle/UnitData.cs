@@ -8,5 +8,6 @@ namespace Battle
         public int typeid { get; set; }
         public int hp { get; set; }
         public int dps { get; set; }
+        public int speed { get; set; }
     };
 }

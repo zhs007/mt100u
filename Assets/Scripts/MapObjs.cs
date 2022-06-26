@@ -14,6 +14,7 @@ public class MapObjs : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("MapObjs start...");
         // List<Vector2> lst = new List<Vector2>();
 
         for (int i = 0; i < nums; ++i)

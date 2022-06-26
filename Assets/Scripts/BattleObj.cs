@@ -19,6 +19,11 @@ public class BattleObj : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("BattleObj start...");
+
+        Battle.UnitMgr.Init();
+
+        // battle = new Battle.Battle(minX, minY, maxX, maxY, areaW, areaH);
         // battle = new Battle.Battle();
     }
 
