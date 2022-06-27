@@ -17,4 +17,20 @@ namespace Battle
     {
         public const int AI1 = 1;
     };
+
+    public class FactionType
+    {
+        public const int Player = 0;
+        public const int Enemey = 1;
+
+        public static int GetEnemy(int faction)
+        {
+            if (faction == Player)
+            {
+                return Enemey;
+            }
+
+            return Player;
+        }
+    };
 }

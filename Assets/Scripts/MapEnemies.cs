@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Battle;
 
 public class MapEnemies : MonoBehaviour
 {
@@ -45,7 +46,7 @@ public class MapEnemies : MonoBehaviour
             Quaternion.identity);
 
             // Battle.MapObj obj = battle.battle.New(new Vector2(tx, ty), 1, true, null);
-            Battle.Unit unit = battle.battle.NewUnit(20000, new Vector2(tx, ty), gobj);
+            Battle.Unit unit = battle.battle.NewUnit(20000, new Vector2(tx, ty), gobj, FactionType.Enemey);
             unit.AddAI(Battle.AIType.AI1);
             // unit.AddAI(new Battle.AI1(unit));
         }

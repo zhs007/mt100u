@@ -7,6 +7,7 @@ namespace Battle
     {
         protected Unit mainUnit;
         public bool isForward;
+        public Unit target;
 
         public AI1(Unit unit)
         {

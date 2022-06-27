@@ -11,6 +11,7 @@ namespace Battle
         protected Dictionary<int, MapObj> staticObjs;
         public int AreaX { get; private set; }
         public int AreaY { get; private set; }
+        protected FactionUnits factionUnits;
 
         public Area(int ax, int ay)
         {
@@ -19,6 +20,7 @@ namespace Battle
 
             objs = new Dictionary<int, MapObj>();
             staticObjs = new Dictionary<int, MapObj>();
+            factionUnits = new FactionUnits();
         }
 
         public void Add(MapObj obj)
@@ -30,6 +32,11 @@ namespace Battle
             else
             {
                 objs[obj.EntityID] = obj;
+            }
+
+            if (obj is Unit)
+            {
+                factionUnits.AddUnit((Unit)obj);
             }
         }
 

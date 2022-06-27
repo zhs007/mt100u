@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Battle;
 
 public class PlayerCtrl : MonoBehaviour
 {
@@ -34,7 +35,7 @@ public class PlayerCtrl : MonoBehaviour
             transform.position.y,
             mainCamera.transform.position.z);
 
-        unit = battle.battle.NewUnit(10000, new Vector2(transform.position.x, transform.position.y), this.gameObject);
+        unit = battle.battle.NewUnit(10000, new Vector2(transform.position.x, transform.position.y), this.gameObject, FactionType.Player);
         battle.battle.AddObjArea(1000, unit, 10);
     }
 

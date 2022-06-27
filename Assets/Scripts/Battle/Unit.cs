@@ -10,8 +10,9 @@ namespace Battle
         public UnitData Data { get; protected set; }
         protected IAI ai;
         protected int lastThinkTs;
+        public int Faction { get; private set; }
 
-        public Unit(int entityID, UnitData data, Vector2 pos, bool isStatic, Battle battle, GameObject gameObj) : base(entityID, pos, data.size, isStatic, battle, gameObj)
+        public Unit(int entityID, UnitData data, Vector2 pos, bool isStatic, Battle battle, GameObject gameObj, int faction) : base(entityID, pos, data.size, isStatic, battle, gameObj)
         {
             Data = data;
 
@@ -23,6 +24,8 @@ namespace Battle
             Forward = new Vector2(Mathf.Cos(0), Mathf.Sin(0));
 
             lastThinkTs = Random.Range(0, data.thinkts);
+
+            Faction = faction;
         }
 
         public void AddAI(int aiType)

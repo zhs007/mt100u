@@ -19,6 +19,7 @@ namespace Battle
         public int AreaHeight { get; private set; }
         protected Dictionary<int, MapObjArea> mapObjAreas;
         protected Dictionary<int, Unit> mapAIUnit;
+        protected FactionUnits factionUnits;
 
         public Battle(int startX, int startY, int endX, int endY, int areaWidth, int areaHeight)
         {
@@ -55,17 +56,21 @@ namespace Battle
             mapObjAreas = new Dictionary<int, MapObjArea>();
 
             mapAIUnit = new Dictionary<int, Unit>();
+
+            factionUnits = new FactionUnits();
         }
 
-        public Unit NewUnit(int unitTypeID, Vector2 pos, GameObject gameObj)
+        public Unit NewUnit(int unitTypeID, Vector2 pos, GameObject gameObj, int faction)
         {
             UnitData ud = UnitMgr.GetUnitData(unitTypeID);
 
-            Unit unit = new Unit(curEntityID, ud, pos, false, this, gameObj);
+            Unit unit = new Unit(curEntityID, ud, pos, false, this, gameObj, faction);
 
             mapObjs[curEntityID++] = unit;
 
             onNewObj(unit);
+
+            factionUnits.AddUnit(unit);
 
             return unit;
         }
@@ -262,6 +267,13 @@ namespace Battle
                 entry.Value.onAIIdle(ts);
                 // procObjArea(entry.Value);
             }
+        }
+
+        public Unit FindVisualTarget(Unit unit)
+        {
+            var enemyTarget = FactionType.GetEnemy(unit.Faction);
+
+            return null;
         }
     };
 }
