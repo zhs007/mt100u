@@ -1,14 +1,15 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Numerics;
 using NReco.Csv;
-using System.IO;
 using UnityEngine;
 
 namespace Battle
 {
     public class UnitMgr
     {
-        protected static Dictionary<int, UnitData> mapUnitData = new Dictionary<int, UnitData>();
+        protected static Dictionary<int, UnitData>
+            mapUnitData = new Dictionary<int, UnitData>();
 
         public static UnitData GetUnitData(int typeid)
         {
@@ -23,64 +24,49 @@ namespace Battle
         public static void Init()
         {
             var docName = @"/chara.csv";
-            var inputLocation = Application.dataPath;
-            inputLocation += (@"/Resources/CSV/" + docName);
 
-            using (var streamRdr = new StreamReader(inputLocation))
-            {
-                var arrHeader = new List<string>();
-                int row = 0;
-
-                var csvReader = new CsvReader(streamRdr, ",");
-                while (csvReader.Read())
+            Utils
+                .LoadCSV<UnitData>(docName,
+                (CsvReader reader, List<string> header) =>
                 {
-                    if (row == 0)
+                    var ud = new UnitData();
+
+                    for (int i = 0; i < reader.FieldsCount; i++)
                     {
-                        for (int i = 0; i < csvReader.FieldsCount; i++)
+                        if (header[i] == "typeid")
                         {
-                            arrHeader.Add(csvReader[i]);
+                            ud.typeid = int.Parse(reader[i]);
+                        }
+                        else if (header[i] == "hp")
+                        {
+                            ud.hp = int.Parse(reader[i]);
+                        }
+                        else if (header[i] == "dps")
+                        {
+                            ud.dps = int.Parse(reader[i]);
+                        }
+                        else if (header[i] == "speed")
+                        {
+                            ud.speed = int.Parse(reader[i]) / 100.0f;
+                        }
+                        else if (header[i] == "size")
+                        {
+                            ud.size = int.Parse(reader[i]) / 100.0f;
+                        }
+                        else if (header[i] == "thinkts")
+                        {
+                            ud.thinkts = int.Parse(reader[i]);
+                        }
+                        else if (header[i] == "visualrange")
+                        {
+                            ud.visualRange = int.Parse(reader[i]) / 100.0f;
                         }
                     }
-                    else
-                    {
-                        var ud = new UnitData();
 
-                        for (int i = 0; i < csvReader.FieldsCount; i++)
-                        {
-                            if (arrHeader[i] == "typeid")
-                            {
-                                ud.typeid = int.Parse(csvReader[i]);
-                            }
-                            else if (arrHeader[i] == "hp")
-                            {
-                                ud.hp = int.Parse(csvReader[i]);
-                            }
-                            else if (arrHeader[i] == "dps")
-                            {
-                                ud.dps = int.Parse(csvReader[i]);
-                            }
-                            else if (arrHeader[i] == "speed")
-                            {
-                                ud.speed = int.Parse(csvReader[i]) / 100.0f;
-                            }
-                            else if (arrHeader[i] == "size")
-                            {
-                                ud.size = int.Parse(csvReader[i]) / 100.0f;
-                            }
-                            else if (arrHeader[i] == "thinkts")
-                            {
-                                ud.thinkts = int.Parse(csvReader[i]);
-                            }
-                        }
+                    mapUnitData[ud.typeid] = ud;
 
-                        mapUnitData[ud.typeid] = ud;
-
-                        // Debug.Log("load unitdata " + ud.typeid + " speed " + ud.speed);
-                    }
-
-                    row++;
-                }
-            }
+                    return ud;
+                });
         }
-    };
+    }
 }
