@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Battle
 {
+    // 地图对象的基类，默认是静态物体，不考虑移动，也不主动考虑碰撞
     public class MapObj
     {
         public Vector2 Pos;
@@ -11,7 +12,7 @@ namespace Battle
         public int EntityID { get; private set; }
         protected Dictionary<int, CollisionData> mapCollisions;
         public bool IsStatic { get; private set; }
-        public Area area { get; private set; }
+        public Area area { get; protected set; }
         protected Battle battle;
         protected Dictionary<int, MapObjArea> mapAreas; // 对象区域缓存，理解为领域吧
         protected Dictionary<int, Func<bool, int>> mapObjAreaFunc;  // 进入别人领域时触发的事件
@@ -29,73 +30,81 @@ namespace Battle
             mapAreas = new Dictionary<int, MapObjArea>();
             mapObjAreaFunc = new Dictionary<int, Func<bool, int>>();
             this.gameObj = gameObj;
+
+            // set area
+            int ax = battle.GetAreaX((int)this.Pos.x);
+            int ay = battle.GetAreaY((int)this.Pos.y);
+
+            Area curArea = battle.GetArea(ax, ay);
+            curArea.Add(this);
+            area = curArea;
         }
 
-        public bool CanCollide(MapObj obj, Vector2 off)
-        {
-            float distance = Vector2.Distance(Pos, obj.Pos + off);
-            CollisionData cd;
+        // public bool CanCollide(MapObj obj, Vector2 off)
+        // {
+        //     float distance = Vector2.Distance(Pos, obj.Pos + off);
+        //     CollisionData cd;
 
-            if (!mapCollisions.ContainsKey(obj.EntityID))
-            {
-                if (distance <= (Size + obj.Size) / 2)
-                {
-                    cd = new CollisionData(this, obj, distance);
-                    mapCollisions[obj.EntityID] = cd;
+        //     if (!mapCollisions.ContainsKey(obj.EntityID))
+        //     {
+        //         if (distance <= (Size + obj.Size) / 2)
+        //         {
+        //             cd = new CollisionData(this, obj, distance);
+        //             mapCollisions[obj.EntityID] = cd;
 
-                    return true;
-                }
+        //             return true;
+        //         }
 
-                return false;
-            }
+        //         return false;
+        //     }
 
-            cd = mapCollisions[obj.EntityID];
+        //     cd = mapCollisions[obj.EntityID];
 
-            if (distance > (Size + obj.Size) / 2)
-            {
-                mapCollisions.Remove(obj.EntityID);
+        //     if (distance > (Size + obj.Size) / 2)
+        //     {
+        //         mapCollisions.Remove(obj.EntityID);
 
-                return false;
-            }
+        //         return false;
+        //     }
 
-            return cd.CanCollide(distance);
-        }
+        //     return cd.CanCollide(distance);
+        // }
 
-        public bool CanCollideEx(Vector2 pos, float size)
-        {
-            return Vector2.Distance(Pos, pos) < (size + Size) / 2;
-        }
+        // public bool CanCollideEx(Vector2 pos, float size)
+        // {
+        //     return Vector2.Distance(Pos, pos) < (size + Size) / 2;
+        // }
 
-        public void onChgArea(Area area)
-        {
-            this.area = area;
-        }
+        // public void onChgArea(Area area)
+        // {
+        //     this.area = area;
+        // }
 
-        public void Move(Vector2 off)
-        {
-            int sx = (int)Pos.x;
-            int sy = (int)Pos.y;
+        // public void Move(Vector2 off)
+        // {
+        //     int sx = (int)Pos.x;
+        //     int sy = (int)Pos.y;
 
-            Pos += off;
+        //     Pos += off;
 
-            int ex = (int)Pos.x;
-            int ey = (int)Pos.y;
+        //     int ex = (int)Pos.x;
+        //     int ey = (int)Pos.y;
 
-            if (sx != ex || sy != ey)
-            {
-                onMoved();
+        //     if (sx != ex || sy != ey)
+        //     {
+        //         onMoved();
 
-                battle.onChgPos(this);
-            }
-        }
+        //         battle.onChgPos(this);
+        //     }
+        // }
 
-        public void onMoved()
-        {
-            foreach (KeyValuePair<int, MapObjArea> entry in mapAreas)
-            {
-                entry.Value.onMoved();
-            }
-        }
+        // public void onMoved()
+        // {
+        //     foreach (KeyValuePair<int, MapObjArea> entry in mapAreas)
+        //     {
+        //         entry.Value.onMoved();
+        //     }
+        // }
 
         public void onAddObjArea(MapObjArea moa)
         {
@@ -115,6 +124,11 @@ namespace Battle
             }
 
             return null;
+        }
+
+        public bool CanCollideEx(Vector2 pos, float size)
+        {
+            return Vector2.Distance(Pos, pos) < (size + Size) / 2;
         }
     };
 }

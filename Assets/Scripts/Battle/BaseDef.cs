@@ -33,4 +33,9 @@ namespace Battle
             return Player;
         }
     };
+
+    public class BaseDef
+    {
+        public const float MaxDistance = 99999999;
+    }
 }

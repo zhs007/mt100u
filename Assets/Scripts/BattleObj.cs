@@ -13,7 +13,7 @@ public class BattleObj : MonoBehaviour
     {
         Battle.AIMgr.Init();
 
-        battle = new Battle.Battle(minX, minY, maxX, maxY, areaW, areaH);
+        // battle = new Battle.Battle(minX, minY, maxX, maxY, areaW, areaH);
     }
 
     // Start is called before the first frame update
@@ -23,7 +23,7 @@ public class BattleObj : MonoBehaviour
 
         Battle.UnitMgr.Init();
 
-        // battle = new Battle.Battle(minX, minY, maxX, maxY, areaW, areaH);
+        battle = new Battle.Battle(minX, minY, maxX, maxY, areaW, areaH);
         // battle = new Battle.Battle();
     }
 

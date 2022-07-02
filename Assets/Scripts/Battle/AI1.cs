@@ -19,6 +19,11 @@ namespace Battle
         {
             if (isForward)
             {
+                if (target != null)
+                {
+                    mainUnit.LookAt(target.Pos);
+                }
+
                 mainUnit.MoveForward(ts / 1000.0f);
             }
             // int r = Random.Range(0, 20);
@@ -42,14 +47,21 @@ namespace Battle
             int r = Random.Range(0, 2);
             if (r < 1)
             {
-                int za = Random.Range(-30, 30);
-                mainUnit.Rotate((float)za);
+                var t = mainUnit.FindVisualTarget();
+                if (t == null)
+                {
+                    int za = Random.Range(-30, 30);
+                    mainUnit.Rotate((float)za);
 
-                isForward = true;
+                    isForward = true;
+                }
+                else
+                {
+                    target = t;
+                    mainUnit.LookAt(target.Pos);
 
-                // Debug.Log("AI1 angle - " + za);
-
-                // mainUnit.MoveForward();
+                    isForward = true;
+                }
 
                 return true;
             }

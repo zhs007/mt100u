@@ -34,7 +34,7 @@ namespace Battle
                     }
                     else
                     {
-                        funcParseObj (csvReader, arrHeader);
+                        funcParseObj(csvReader, arrHeader);
                     }
 
                     row++;

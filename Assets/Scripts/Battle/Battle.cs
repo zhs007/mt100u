@@ -7,7 +7,7 @@ namespace Battle
     public class Battle
     {
         protected Dictionary<int, MapObj> mapObjs;
-        // protected Dictionary<int, StaticObj> mapUnits;
+        protected Dictionary<int, Unit> mapUnits;
         protected int curEntityID;
         protected Unit mainUnit;
         protected Area[,] areas;
@@ -52,6 +52,7 @@ namespace Battle
 
             curEntityID = 1;
             mapObjs = new Dictionary<int, MapObj>();
+            mapUnits = new Dictionary<int, Unit>();
 
             mapObjAreas = new Dictionary<int, MapObjArea>();
 
@@ -66,7 +67,10 @@ namespace Battle
 
             Unit unit = new Unit(curEntityID, ud, pos, false, this, gameObj, faction);
 
-            mapObjs[curEntityID++] = unit;
+            mapObjs[curEntityID] = unit;
+            mapUnits[curEntityID] = unit;
+
+            curEntityID++;
 
             onNewObj(unit);
 
@@ -80,7 +84,9 @@ namespace Battle
             MapObj obj = new MapObj(curEntityID, pos, size, isStatic, this, gameObj);
             obj.Pos = pos;
 
-            mapObjs[curEntityID++] = obj;
+            mapObjs[curEntityID] = obj;
+
+            curEntityID++;
 
             if (onNew != null)
             {
@@ -161,12 +167,12 @@ namespace Battle
 
         protected void onNewObj(MapObj obj)
         {
-            int ax = GetAreaX((int)obj.Pos.x);
-            int ay = GetAreaY((int)obj.Pos.y);
+            // int ax = GetAreaX((int)obj.Pos.x);
+            // int ay = GetAreaY((int)obj.Pos.y);
 
-            Area curArea = areas[ax, ay];
-            curArea.Add(obj);
-            obj.onChgArea(curArea);
+            // Area curArea = areas[ax, ay];
+            // curArea.Add(obj);
+            // obj.onChgArea(curArea);
 
             foreach (KeyValuePair<int, MapObjArea> entry in mapObjAreas)
             {
@@ -174,18 +180,18 @@ namespace Battle
             }
         }
 
-        public void onChgPos(MapObj obj)
+        public void onChgPos(Unit unit)
         {
-            int ax = GetAreaX((int)obj.Pos.x);
-            int ay = GetAreaX((int)obj.Pos.y);
+            int ax = GetAreaX((int)unit.Pos.x);
+            int ay = GetAreaX((int)unit.Pos.y);
 
-            if (ax != obj.area.AreaX || ay != obj.area.AreaY)
+            if (ax != unit.area.AreaX || ay != unit.area.AreaY)
             {
-                obj.area.Remove(obj);
+                unit.area.Remove(unit);
 
                 Area curArea = areas[ax, ay];
-                curArea.Add(obj);
-                obj.onChgArea(curArea);
+                curArea.Add(unit);
+                unit.onChgArea(curArea);
             }
 
             foreach (KeyValuePair<int, MapObjArea> entry in mapObjAreas)
@@ -269,11 +275,16 @@ namespace Battle
             }
         }
 
-        public Unit FindVisualTarget(Unit unit)
+        public Area GetArea(int x, int y)
         {
-            var enemyTarget = FactionType.GetEnemy(unit.Faction);
+            return areas[x, y];
+        }
 
-            return null;
+        public AreaRange NewAreaRange(Vector2 pos, float size)
+        {
+            (int sax, int say, int eax, int eay) = calcAreaWithPosSize(pos, size);
+
+            return new AreaRange(sax, say, eax, eay);
         }
     };
 }

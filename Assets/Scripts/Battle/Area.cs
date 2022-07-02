@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace Battle
@@ -7,7 +8,7 @@ namespace Battle
     // 所以判断时，需要判断周围至少4个区域
     public class Area
     {
-        protected Dictionary<int, MapObj> objs;
+        protected Dictionary<int, Unit> units;
         protected Dictionary<int, MapObj> staticObjs;
         public int AreaX { get; private set; }
         public int AreaY { get; private set; }
@@ -18,7 +19,7 @@ namespace Battle
             AreaX = ax;
             AreaY = ay;
 
-            objs = new Dictionary<int, MapObj>();
+            units = new Dictionary<int, Unit>();
             staticObjs = new Dictionary<int, MapObj>();
             factionUnits = new FactionUnits();
         }
@@ -29,13 +30,11 @@ namespace Battle
             {
                 staticObjs[obj.EntityID] = obj;
             }
-            else
-            {
-                objs[obj.EntityID] = obj;
-            }
 
             if (obj is Unit)
             {
+                units[obj.EntityID] = (Unit)obj;
+
                 factionUnits.AddUnit((Unit)obj);
             }
         }
@@ -48,17 +47,17 @@ namespace Battle
             }
             else
             {
-                objs.Remove(obj.EntityID);
+                units.Remove(obj.EntityID);
             }
         }
 
         public bool CanMove(Unit unit, Vector2 off)
         {
-            foreach (KeyValuePair<int, MapObj> entry in objs)
+            foreach (KeyValuePair<int, Unit> entry in units)
             {
                 if (entry.Key != unit.EntityID)
                 {
-                    if (entry.Value.CanCollide(unit, off))
+                    if (unit.CanCollide(entry.Value, off))
                     {
                         return false;
                     }
@@ -69,7 +68,7 @@ namespace Battle
             {
                 if (entry.Key != unit.EntityID)
                 {
-                    if (entry.Value.CanCollide(unit, off))
+                    if (unit.CanCollide(entry.Value, off))
                     {
                         return false;
                     }
@@ -81,7 +80,7 @@ namespace Battle
 
         public void procObjArea(MapObjArea moa)
         {
-            foreach (KeyValuePair<int, MapObj> entry in objs)
+            foreach (KeyValuePair<int, Unit> entry in units)
             {
                 if (entry.Key != moa.obj.EntityID)
                 {
@@ -101,7 +100,7 @@ namespace Battle
         // 这个位置是否可以生成新对象
         public bool IsValidPos(Vector2 pos, float size)
         {
-            foreach (KeyValuePair<int, MapObj> entry in objs)
+            foreach (KeyValuePair<int, Unit> entry in units)
             {
                 if (entry.Value.CanCollideEx(pos, size))
                 {
@@ -118,6 +117,17 @@ namespace Battle
             }
 
             return true;
+        }
+
+        public void ForEachUnits(Func<Unit, bool> onEach)
+        {
+            foreach (KeyValuePair<int, Unit> entry in units)
+            {
+                if (onEach(entry.Value))
+                {
+                    break;
+                }
+            }
         }
     };
 }

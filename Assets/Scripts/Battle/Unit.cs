@@ -11,6 +11,7 @@ namespace Battle
         protected IAI ai;
         protected int lastThinkTs;
         public int Faction { get; private set; }
+        public AreaRange visualAreaRange;
 
         public Unit(int entityID, UnitData data, Vector2 pos, bool isStatic, Battle battle, GameObject gameObj, int faction) : base(entityID, pos, data.size, isStatic, battle, gameObj)
         {
@@ -26,6 +27,8 @@ namespace Battle
             lastThinkTs = Random.Range(0, data.thinkts);
 
             Faction = faction;
+
+            visualAreaRange = battle.NewAreaRange(pos, data.visualRange);
         }
 
         public void AddAI(int aiType)
@@ -75,6 +78,104 @@ namespace Battle
             float curAngle = Mathf.Atan2(Forward.y, Forward.x) * Mathf.Rad2Deg;
             curAngle += angle;
             Forward = new Vector2(Mathf.Cos(curAngle), Mathf.Sin(curAngle));
+            Forward.Normalize();
+        }
+
+        public void onChgArea(Area area)
+        {
+            this.area = area;
+
+            visualAreaRange = battle.NewAreaRange(Pos, Data.visualRange);
+        }
+
+        public void Move(Vector2 off)
+        {
+            int sx = (int)Pos.x;
+            int sy = (int)Pos.y;
+
+            Pos += off;
+
+            int ex = (int)Pos.x;
+            int ey = (int)Pos.y;
+
+            if (sx != ex || sy != ey)
+            {
+                onMoved();
+
+                battle.onChgPos(this);
+            }
+        }
+
+        public void onMoved()
+        {
+            foreach (KeyValuePair<int, MapObjArea> entry in mapAreas)
+            {
+                entry.Value.onMoved();
+            }
+        }
+
+        public bool CanCollide(MapObj obj, Vector2 off)
+        {
+            float distance = Vector2.Distance(Pos, obj.Pos + off);
+            CollisionData cd;
+
+            if (!mapCollisions.ContainsKey(obj.EntityID))
+            {
+                if (distance <= (Size + obj.Size) / 2)
+                {
+                    cd = new CollisionData(this, obj, distance);
+                    mapCollisions[obj.EntityID] = cd;
+
+                    return true;
+                }
+
+                return false;
+            }
+
+            cd = mapCollisions[obj.EntityID];
+
+            if (distance > (Size + obj.Size) / 2)
+            {
+                mapCollisions.Remove(obj.EntityID);
+
+                return false;
+            }
+
+            return cd.CanCollide(distance);
+        }
+
+        public Unit FindVisualTarget()
+        {
+            var enemyTarget = FactionType.GetEnemy(Faction);
+            float d = BaseDef.MaxDistance;
+            Unit target = null;
+
+            visualAreaRange.ForEach(battle, (area) =>
+            {
+                area.ForEachUnits((unit) =>
+                {
+                    if (unit.Faction == enemyTarget)
+                    {
+                        var cd = Vector2.Distance(Pos, unit.Pos);
+                        if (cd < d)
+                        {
+                            d = cd;
+                            target = unit;
+                        }
+                    }
+
+                    return false;
+                });
+
+                return false;
+            });
+
+            return target;
+        }
+
+        public void LookAt(Vector2 pos)
+        {
+            Forward = pos - Pos;
             Forward.Normalize();
         }
 
