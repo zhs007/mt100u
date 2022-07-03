@@ -61,6 +61,10 @@ namespace Battle
                         {
                             ud.visualRange = int.Parse(reader[i]) / 100.0f;
                         }
+                        else if (header[i] == "abandonrange")
+                        {
+                            ud.abandonRange = int.Parse(reader[i]) / 100.0f;
+                        }
                     }
 
                     mapUnitData[ud.typeid] = ud;

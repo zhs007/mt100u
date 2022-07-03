@@ -44,6 +44,17 @@ namespace Battle
 
         public bool onThink()
         {
+            if (target != null)
+            {
+                var cd = Vector2.Distance(mainUnit.Pos, target.Pos);
+                if (cd < mainUnit.Data.abandonRange)
+                {
+                    return true;
+                }
+
+                target = null;
+            }
+
             int r = Random.Range(0, 2);
             if (r < 1)
             {
